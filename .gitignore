@@ -1,0 +1,14 @@
+# Maven build output
+target/
+
+# Eclipse build output
+bin/
+
+# Java compiled files
+*.class
+
+# IDE files
+.idea/
+.vscode/
+.project
+.settings/

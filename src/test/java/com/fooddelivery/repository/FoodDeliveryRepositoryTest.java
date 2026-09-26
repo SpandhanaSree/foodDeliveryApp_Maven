@@ -3,15 +3,15 @@ package com.fooddelivery.repository;
 import com.fooddelivery.bean.Customer;
 import com.fooddelivery.bean.Order;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach; //Prathi test run avvadaniki mundu oka particular method ni execute chesthundi
+import org.junit.jupiter.api.Test; //Test method ni identify cheyyadaniki use chesthundi
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Files; //Files create/write cheyyadaniki Java utility class
+import java.nio.file.Path; //File location/path ni represent chesthundi
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*; //JUnit lo results verify chestundi - assertEquals, assertNotNull, assertNull, assertTrue, assertFalse
 
 class FoodDeliveryRepositoryTest {
 
@@ -19,15 +19,15 @@ class FoodDeliveryRepositoryTest {
     private Path orderFile;
     private FoodDeliveryRepository repository;
 
-    @BeforeEach
-    void setUp() throws IOException {
+    @BeforeEach //This is the setup method - Prathi test run avvadaniki mundu execute avvadaniki
+    void setUp() throws IOException { //throws IOException - file operations exception throw cheyyachu.
 
         // Create temporary CSV files for testing
         customerFile = Files.createTempFile("test-customers", ".csv");
         orderFile = Files.createTempFile("test-orders", ".csv");
 
         // Add test customer data
-        Files.writeString(
+        Files.writeString(  //customerFile file lo ee String content write cheyyi
                 customerFile,
                 "customerId,customerName,phoneNumber,address\n" +
                 "C001,Ravi,9876543210,Hyderabad\n" +
@@ -45,23 +45,23 @@ class FoodDeliveryRepositoryTest {
 
         // Create repository using test CSV files
         repository = new FoodDeliveryRepository(
-                customerFile.toString(),
+                customerFile.toString(), //customerFile is a Path, Path ni String ga convert chesthunam
                 orderFile.toString()
         );
     }
 
     @Test
-    void testCustomersLoadedFromCSV() {
+    void testCustomersLoadedFromCSV() { //Repository CSV nunchi customers correct ga load chesthundha check cheyyadaniki test method
 
         List<Customer> customers = repository.getAllCustomers();
 
-        assertEquals(2, customers.size());
+        assertEquals(2, customers.size()); //2 - expected value, customers.size() - actual value
         assertEquals("C001", customers.get(0).getCustomerId());
         assertEquals("Ravi", customers.get(0).getCustomerName());
     }
 
     @Test
-    void testOrdersLoadedFromCSV() {
+    void testOrdersLoadedFromCSV() { //Repository CSV nunchi orders correct ga load chesthundha check cheyyadaniki test method
 
         List<Order> orders = repository.getAllOrders();
 
@@ -71,7 +71,7 @@ class FoodDeliveryRepositoryTest {
     }
 
     @Test
-    void testFindExistingCustomer() {
+    void testFindExistingCustomer() { //Repository lo existing customer ni find chesthundha check cheyyadaniki test method
 
         Customer customer = repository.findCustomerById("C001");
 
@@ -81,7 +81,7 @@ class FoodDeliveryRepositoryTest {
     }
 
     @Test
-    void testFindNonExistingCustomer() {
+    void testFindNonExistingCustomer() { //Repository lo non-existing customer ni find chesthundha check cheyyadaniki test method
 
         Customer customer = repository.findCustomerById("C999");
 
@@ -89,7 +89,7 @@ class FoodDeliveryRepositoryTest {
     }
 
     @Test
-    void testFindExistingOrder() {
+    void testFindExistingOrder() { //Repository lo existing order ni find chesthundha check cheyyadaniki test method
 
         Order order = repository.findOrderById("O001");
 
@@ -100,7 +100,7 @@ class FoodDeliveryRepositoryTest {
     }
 
     @Test
-    void testFindNonExistingOrder() {
+    void testFindNonExistingOrder() { //Repository lo non-existing order ni find chesthundha check cheyyadaniki test method
 
         Order order = repository.findOrderById("O999");
 
@@ -108,7 +108,7 @@ class FoodDeliveryRepositoryTest {
     }
 
     @Test
-    void testAddCustomer() {
+    void testAddCustomer() { //Repository lo new customer ni add chesthundha check cheyyadaniki test method
 
         Customer customer = new Customer(
                 "C003",
@@ -119,15 +119,14 @@ class FoodDeliveryRepositoryTest {
 
         repository.addCustomer(customer);
 
-        Customer savedCustomer =
-                repository.findCustomerById("C003");
+        Customer savedCustomer = repository.findCustomerById("C003");
 
-        assertNotNull(savedCustomer);
+        assertNotNull(savedCustomer); //Customer object null kaadu ani check chesthundhi
         assertEquals("Sita", savedCustomer.getCustomerName());
     }
 
     @Test
-    void testAddOrder() {
+    void testAddOrder() { //Repository lo new order ni add chesthundha check cheyyadaniki test method
 
         Order order = new Order(
                 "O004",
@@ -140,8 +139,7 @@ class FoodDeliveryRepositoryTest {
 
         repository.addOrder(order);
 
-        Order savedOrder =
-                repository.findOrderById("O004");
+        Order savedOrder = repository.findOrderById("O004");
 
         assertNotNull(savedOrder);
         assertEquals("Burger", savedOrder.getFoodName());
@@ -150,7 +148,7 @@ class FoodDeliveryRepositoryTest {
     }
 
     @Test
-    void testGetOrdersByCustomerId() {
+    void testGetOrdersByCustomerId() { //Repository lo particular customerId ki orders correct ga return chesthundha check cheyyadaniki test method
 
         List<Order> orders =
                 repository.getOrdersByCustomerId("C001");
@@ -162,7 +160,7 @@ class FoodDeliveryRepositoryTest {
     }
 
    @Test
-void testSaveCustomers() throws IOException {
+   void testSaveCustomers() throws IOException { //Repository lo new customer add chesaka CSV file lo correct ga save chesthundha check cheyyadaniki test method
 
     Customer customer = new Customer(
             "C003",
@@ -173,14 +171,14 @@ void testSaveCustomers() throws IOException {
 
     repository.addCustomer(customer);
 
-    FoodDeliveryRepository reloadedRepository =
-            new FoodDeliveryRepository(
+    //Create a NEW Repository instance to load data from the CSV files
+    FoodDeliveryRepository reloadedRepository = new FoodDeliveryRepository(
                     customerFile.toString(),
                     orderFile.toString()
             );
 
-    Customer savedCustomer =
-            reloadedRepository.findCustomerById("C003");
+    //Check if the newly added customer is present in the reloaded repository
+    Customer savedCustomer = reloadedRepository.findCustomerById("C003");
 
     assertNotNull(savedCustomer);
     assertEquals("Sita", savedCustomer.getCustomerName());
@@ -189,33 +187,78 @@ void testSaveCustomers() throws IOException {
 }
 
 @Test
-void testSaveOrders() throws IOException {
+void testSaveOrders() throws IOException { //Repository lo new order add chesaka CSV file lo correct ga save chesthundha check cheyyadaniki test method
 
-    Order order = new Order(
-            "O004",
-            "C001",
-            "Burger",
-            2,
-            150,
-            300
-    );
+        Order order = new Order(
+                    "O004",
+                 "C001",
+                 "Burger",
+                 2,
+                 150,
+                 300
+                );
 
-    repository.addOrder(order);
+        repository.addOrder(order);
 
-    FoodDeliveryRepository reloadedRepository =
-            new FoodDeliveryRepository(
-                    customerFile.toString(),
-                    orderFile.toString()
-            );
+        //Create a NEW Repository instance to load data from the CSV files
+        FoodDeliveryRepository reloadedRepository = new FoodDeliveryRepository(
+                            customerFile.toString(),
+                            orderFile.toString()
+                );
 
-    Order savedOrder =
-            reloadedRepository.findOrderById("O004");
+        Order savedOrder = reloadedRepository.findOrderById("O004");
 
-    assertNotNull(savedOrder);
-    assertEquals("C001", savedOrder.getCustomerId());
-    assertEquals("Burger", savedOrder.getFoodName());
-    assertEquals(2, savedOrder.getQuantity());
-    assertEquals(150, savedOrder.getPrice());
-    assertEquals(300, savedOrder.getTotalAmount());
+                assertNotNull(savedOrder);
+                assertEquals("C001", savedOrder.getCustomerId());
+                assertEquals("Burger", savedOrder.getFoodName());
+                assertEquals(2, savedOrder.getQuantity());
+                assertEquals(150, savedOrder.getPrice());
+                assertEquals(300, savedOrder.getTotalAmount());
+        }
 }
-}
+
+/*So entire test class ni 3 categories ga divide chestham
+ 1️⃣ LOAD tests - CSV → Java objects correct ga load ayyaya?
+        testCustomersLoadedFromCSV()
+        testOrdersLoadedFromCSV()
+ 2️⃣ FIND tests - Repository correct data ni search/filter chesthundha?
+        testFindExistingCustomer()
+        testFindNonExistingCustomer()
+
+        testFindExistingOrder()
+        testFindNonExistingOrder()
+
+        testGetOrdersByCustomerId()
+ 3️⃣ SAVE tests - Java object → CSV correct ga save avuthundha? And saved data ni malli load cheyyagalama?
+
+Entire Test Flow :-
+
+                JUnit 5
+                   │
+                   ▼
+             @BeforeEach
+                   │
+                   ▼
+        Create temporary CSVs
+                   │
+          ┌────────┴────────┐
+          ▼                 ▼
+   customers.csv       orders.csv
+          │                 │
+          └────────┬────────┘
+                   ▼
+          FoodDeliveryRepository
+                   │
+        ┌──────────┼───────────┐
+        ▼          ▼           ▼
+      LOAD        FIND        SAVE
+        │          │           │
+        ▼          ▼           ▼
+      Tests      Tests       Tests
+        │          │           │
+        └──────────┼───────────┘
+                   ▼
+             Assertions
+                   │
+             PASS / FAIL
+ */

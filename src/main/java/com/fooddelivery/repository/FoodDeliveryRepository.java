@@ -1,3 +1,5 @@
+/*Data ni store cheyyadam, retrieve cheyyadam, search cheyyadam,
+ CSV nunchi load cheyyadam, CSV ki save cheyyadam*/
 package com.fooddelivery.repository;
 
 import java.util.List;  
@@ -22,13 +24,13 @@ public class FoodDeliveryRepository {
     loadCustomers();
     loadOrders();
 }
-
-FoodDeliveryRepository(String customerFile, String orderFile) {
-    this.customerFile = customerFile;
-    this.orderFile = orderFile;
-    loadCustomers();
-    loadOrders();
-}
+    //package-private
+    FoodDeliveryRepository(String customerFile, String orderFile) {
+        this.customerFile = customerFile;
+        this.orderFile = orderFile;
+        loadCustomers();
+        loadOrders();
+    }
    
     public static FoodDeliveryRepository getInstance() {
         if (instance == null) {  
